@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col-2">Column</div>
                 <div class="col-10">
-                    <div class="container">
+                    <div class="container" >
                         <div class="row">
                             <ul class="nav nav-tabs">
                                 <li class="nav-item">
@@ -54,8 +54,13 @@
                         <div class="row" v-for="task in tasks">
                             <div class="card card-rounded">
                                 <div class="card-header">
+                                    <div class="float-end">
+                                        <input type="checkbox">                                      
+                                        
+                                    </div>
                                     <h4>{{task.name}}</h4>
                                     <p>Category: {{task.category}}</p>
+                                    
                                 </div>
                                 <div class="card-body">
                                     <p class="card-text-small">{{ task.description }}</p>
@@ -148,7 +153,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" @click="submit_new_task" data-bs-dismiss="modal">Submit</button>
+                  <button type="button" class="btn btn-primary" @click="submit_new_task" v-on:keyup.enter="submit_new_task" data-bs-dismiss="modal">Submit</button>
                   <button type="button" class="btn btn-secondary" @click="reset_new_task">Clear</button>
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="reset_new_task">Close</button>
                 </div>
@@ -172,6 +177,7 @@
                     edit_task: false,
                     selected_task_id: null,
                     active_task: {},
+                    ask_delete_task: false,
                     new_task: {
                         "name":"",
                         "category":""
