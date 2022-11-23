@@ -29,12 +29,15 @@ class DB:
         self.tasks = self.db.table("tasks")
         # self.tags = self.db.table('tags')
         
-    def insert_task(self, task: Task)->bool:
+    def insert_task(self, task: Task)->tuple[bool, dict]:
         try:
-            self.tasks.insert(task.as_dict())
+            id = self.tasks.insert(task.as_dict())
+            # task.id = id
+            new_task = Task.from_doc(self.tasks.get(doc_id=id))
+            print(new_task)
         except:
-            return False 
-        return True
+            return False, {}
+        return True, new_task
         
     def all_tasks(self):
         task_docs = self.tasks.all()
@@ -46,5 +49,11 @@ class DB:
             self.tasks.update(task.as_dict(), doc_ids=[task.id])
         except KeyError:
             return False
-        
+        return True
+    
+    def remove_tasks(self, task_ids)->bool:
+        try:
+            self.tasks.remove(doc_ids=task_ids)
+        except:
+            return False
         return True

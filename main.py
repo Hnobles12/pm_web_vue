@@ -20,12 +20,18 @@ async def tasks():
 
 @app.post('/tasks/new')
 async def new_task(task: Task):
-    if not db.insert_task(task):
+    success, new_task = db.insert_task(task)
+    if not success:
         raise HTTPException(500, detail="Could not create task.")
-    return task
+    return new_task
 
 @app.post('/tasks/update')
 async def update_task(task: Task):
     if not db.update_task(task):
         raise HTTPException(500, detail="Could not update task. Incorrect task id.")
     return task
+
+@app.post('/tasks/remove')
+async def remove_tasks(ids: list[int]):
+    if not db.remove_tasks(ids):
+        raise HTTPException(500, detail="Could not remove tasks.")

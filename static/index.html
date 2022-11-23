@@ -43,31 +43,120 @@
                         </div>
                     </div>
                     <div class="container tab" v-if="active_tab == 'tasks'">
+                        <div class="row">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#new_task_modal">New Task</button>
+                                <button type="button" class="btn btn-secondary">Middle</button>
+                                <button type="button" class="btn btn-secondary">Right</button>
+                              </div>
+                        </div>
+                        <br>
                         <div class="row" v-for="task in tasks">
                             <div class="card card-rounded">
-                                <div class="card-header">[{{ task.id }}] {{ task.name }}</div>
+                                <div class="card-header">
+                                    <h4>{{task.name}}</h4>
+                                    <p>Category: {{task.category}}</p>
+                                </div>
                                 <div class="card-body">
-                                    <p class="card-text">Description: {{ task.description }}</p>
+                                    <p class="card-text-small">{{ task.description }}</p>
                                     <button class="btn btn-primary" @click="open_task(task.id)">Open</button>
                                 </div>
                             </div>
+                            <br>
                         </div>
+                        <br>
                     </div>
                     <div class="container tab" v-if="active_tab == 'task_details'">
+                        <br>
                         <h3 v-if="task_selected == false">No task selected.</h3>
-                        <h3>Name: {{ active_task.name }}</h3>
-                        <p>Selected Task ID: {{ selected_task_id }}</p>
-                        <h3>Name: {{ active_task.name }}</h3>
-                        <a class="btn btn-secondary" @click="edit_task = true">Edit</a>
-                        <input type="text" name="name" v-model="active_task.name">
-                        <button @click="update_task" class="btn btn-outline-success">Update</button>
-                        <button @click="close_task" class="btn btn-outline-danger">Close</button>
+
+                        <div class="card card-rounded border-secondary">
+                            <div class="card-header">
+
+
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Name</span>
+                                    </div>
+                                    <input class="form-control" type="text" name="name" v-model="active_task.name"
+                                        :readonly="edit_task ? false : true">
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Category</span>
+                                    </div>
+                                    <input class="form-control" type="text" name="name" v-model="active_task.category"
+                                        :readonly="edit_task ? false : true">
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Charge Number</span>
+                                    </div>
+                                    <input class="form-control" type="text" name="name" v-model="active_task.charge_num"
+                                        :readonly="edit_task ? false : true">
+                                </div>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="card border-secondary">
+                                    <div class="card-header">Description</div>
+                                    <div class="card-body">
+                                      <textarea class="form-control" v-model="active_task.description" rows="3"
+                                    :readonly="edit_task ? false : true"></textarea>
+                                    </div>
+                                  </div>
+
+                                <div class="btn-group" role="group"><button class="btn btn-outline-light"
+                                        @click="edit_task = true" v-if="edit_task == false">Edit</button>
+                                    <button class="btn btn-outline-success" @click="update_task"
+                                        v-if="edit_task == true">Save</button>
+                                    <button @click="close_task" class="btn btn-outline-danger">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+
 
                     </div>
                 </div>
             </div>
         </div>
-        <h1>active task below</h1>
+
+        
+        <div class="modal" id="new_task_modal" ref="new_task_modal">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">New Task</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Name</span>
+                        </div>
+                        <input class="form-control" type="text" name="name" v-model="new_task.name">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Category</span>
+                        </div>
+                        <input class="form-control" type="text" name="name" v-model="new_task.category">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" @click="submit_new_task" data-bs-dismiss="modal">Submit</button>
+                  <button type="button" class="btn btn-secondary" @click="reset_new_task">Clear</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="reset_new_task">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <h5>active task below</h5>
         <p>{{ active_task }}</p>
     </div>
     <script>
@@ -83,6 +172,10 @@
                     edit_task: false,
                     selected_task_id: null,
                     active_task: {},
+                    new_task: {
+                        "name":"",
+                        "category":""
+                    },
                     base_url: "http://127.0.0.1:8000"
                 }
             },
@@ -90,6 +183,21 @@
                 get_all() {
                     axios.get(this.base_url + '/tasks')
                         .then(response => this.tasks = response.data)
+                },
+
+                async submit_new_task(){
+                    const response = await axios.post(this.base_url + '/tasks/new', this.new_task)
+                    console.log('submitted')
+                    this.active_task = response.data
+                    console.log(response)
+                    this.edit_task = true
+                    this.active_tab = 'task_details'
+                    this.reset_new_task()
+                    this.get_all()
+                },
+
+                reset_new_task(){
+                    this.new_task = {}
                 },
 
                 open_tab(name) {
@@ -111,6 +219,7 @@
                     this.task_selected = false
                     this.active_tab = 'tasks'
                     this.active_task = {}
+                    this.edit_task = false
                 },
 
                 async update_task() {
@@ -118,7 +227,7 @@
                     console.log('submitted')
                     this.active_task = response.data
                     console.log(response)
-
+                    this.edit_task = false
                 }
             },
 
@@ -139,6 +248,14 @@
 
     .tab {
         outline-width: 2px;
+    }
+
+    .input-group>.input-group-prepend {
+        flex: 0 0 20%;
+    }
+
+    .input-group .input-group-text {
+        width: 100%;
     }
 </style>
 
