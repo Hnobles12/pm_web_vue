@@ -24,7 +24,7 @@ class Task(BaseModel):
     
 class DB:
     def __init__(self):
-        self.file = '../db/db.json'
+        self.file = 'db/db.json'
         self.db = tinydb.TinyDB(self.file)
         self.tasks = self.db.table("tasks")
         # self.tags = self.db.table('tags')

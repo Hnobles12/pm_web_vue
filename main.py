@@ -1,15 +1,13 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 import json
 from db import DB, Task
 
 app = FastAPI()
 db = DB()
 
-@app.get('/')
-async def root():
-    html_content = str(open('../pages/index.html', 'r').read())
-    return HTMLResponse(content=html_content)   
+app.mount('/ui', StaticFiles(directory='static'), name='static') 
 
 @app.get('/tasks')
 async def tasks():
