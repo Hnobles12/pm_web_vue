@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 import json
 from db import DB, Task
@@ -8,6 +8,10 @@ app = FastAPI()
 db = DB()
 
 app.mount('/ui', StaticFiles(directory='static'), name='static') 
+
+@app.get('/')
+async def root():
+    return RedirectResponse('/ui/index.html')
 
 @app.get('/tasks')
 async def tasks():
