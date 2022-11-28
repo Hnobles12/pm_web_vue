@@ -45,9 +45,11 @@ class DB:
             return False, {}
         return True, new_task
         
-    def all_tasks(self):
+    def all_tasks(self, recent_first:bool=True):
         task_docs = self.tasks.all()
         tasks = [Task.from_doc(doc) for doc in task_docs]
+        if recent_first:
+            tasks.reverse()
         return tasks
     
     def update_task(self, task:Task)->bool:
