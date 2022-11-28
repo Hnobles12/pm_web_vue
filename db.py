@@ -10,6 +10,12 @@ class Task(BaseModel):
     charge_num: int | None = None
     category: str | None = "NONE"
     tags: list | None = []
+    tve: str | None = ''
+    todos: str | None = ''
+    created: str | None = ''
+    updated: str | None = ''
+    status: str | None = ''
+    disposition: str | None = ''
     
     def as_dict(self):
         return dict(self)
@@ -24,7 +30,7 @@ class Task(BaseModel):
     
 class DB:
     def __init__(self):
-        self.file = 'db/db.json'
+        self.file = 'C:\\Users\\e433679\\Documents\\Project_Manager\\pm_web_db.json'
         self.db = tinydb.TinyDB(self.file)
         self.tasks = self.db.table("tasks")
         # self.tags = self.db.table('tags')
