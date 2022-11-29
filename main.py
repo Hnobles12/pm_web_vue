@@ -3,9 +3,13 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 import json
 from db import DB, Task
+from config import load_config
+
+CONF_PATH = 'db/config.json'
 
 app = FastAPI()
 db = DB()
+conf = load_config(CONF_PATH)
 
 app.mount('/ui', StaticFiles(directory='static'), name='static') 
 
