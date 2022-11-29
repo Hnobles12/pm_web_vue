@@ -16,6 +16,7 @@ class Task(BaseModel):
     updated: str | None = ''
     status: str | None = ''
     disposition: str | None = ''
+    directory: str | None = ''
     
     def as_dict(self):
         return dict(self)
