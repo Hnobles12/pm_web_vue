@@ -4,13 +4,15 @@ from fastapi.staticfiles import StaticFiles
 import json
 from db import DB, Task
 from config import load_config
+from fs_manager import FSManager
 
 CONF_PATH = 'db/config.json'
 
-app = FastAPI()
-db = DB()
 conf = load_config(CONF_PATH)
+db = DB(conf.get('pm_db'))
+fs = FSManager(conf.get('pm_dir'))
 
+app = FastAPI()
 app.mount('/ui', StaticFiles(directory='static'), name='static') 
 
 @app.get('/')
@@ -24,6 +26,7 @@ async def tasks():
 
 @app.post('/tasks/new')
 async def new_task(task: Task):
+    task.directory = fs.create_proj_dir(task)
     success, new_task = db.insert_task(task)
     if not success:
         raise HTTPException(500, detail="Could not create task.")
