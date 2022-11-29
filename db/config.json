@@ -1,4 +1,5 @@
 {
     "pm_dir":"test",
-    "pm_db":"db/db.json"
+    "pm_db":"db/db.json",
+    "file_manager":"C:/Users/e433679/Programs/FreeCommanderXE/FreeCommander.exe"
 }
