@@ -30,8 +30,8 @@ class Task(BaseModel):
 
     
 class DB:
-    def __init__(self):
-        self.file = 'C:\\Users\\e433679\\Documents\\Project_Manager\\pm_web_db.json'
+    def __init__(self, db_file:str='.'):
+        self.file = db_file
         self.db = tinydb.TinyDB(self.file)
         self.tasks = self.db.table("tasks")
         # self.tags = self.db.table('tags')
