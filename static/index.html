@@ -114,6 +114,13 @@
 
                                   </select>
                                 </div>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Use Local FS</span>
+                                    </div>
+                                    <input class="form-check-input align-middle" type="checkbox" value="" v-model="active_task.use_local_fs"
+                                        :disabled="edit_task ? false : true">
+                                </div>
                                 
                             </div>
                             <div class="card-body overflow-scroll">
