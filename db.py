@@ -17,6 +17,7 @@ class Task(BaseModel):
     status: str | None = ''
     disposition: str | None = ''
     directory: str | None = ''
+    use_local_fs: bool | None = False
     
     def as_dict(self):
         return dict(self)

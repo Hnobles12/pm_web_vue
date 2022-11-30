@@ -29,8 +29,8 @@ class FSManager:
         print(path)
         
         path.mkdir(parents=True, exist_ok=True)
-        task.directory = path
-        return path
+        task.directory = path.as_posix()
+        return path.as_posix()
         
     def open_fm(self, task:Task, fm_exe:str, args:list[str]=[]):
         Popen([fm_exe]+args+[task.directory])

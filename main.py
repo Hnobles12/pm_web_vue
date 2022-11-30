@@ -26,7 +26,8 @@ async def tasks():
 
 @app.post('/tasks/new')
 async def new_task(task: Task):
-    task.directory = fs.create_proj_dir(task)
+    if task.use_local_fs:
+        fs.create_proj_dir(task)
     success, new_task = db.insert_task(task)
     if not success:
         raise HTTPException(500, detail="Could not create task.")
@@ -34,6 +35,8 @@ async def new_task(task: Task):
 
 @app.post('/tasks/update')
 async def update_task(task: Task):
+    if task.use_local_fs:
+        fs.create_proj_dir(task)
     if not db.update_task(task):
         raise HTTPException(500, detail="Could not update task. Incorrect task id.")
     return task
