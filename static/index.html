@@ -12,10 +12,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.3/axios.min.js"></script>
 </head>
 
-<body >
+<body>
     <div id="app">
-         <h1>Tasks</h1>   
-        
+        <h1>Tasks</h1>
+
         <div class="container-fluid align-middle">
             <div class="row">
                 <div class="col-2">Column</div>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="container tab" v-if="active_tab == 'tasks'">
                         <div class="row">
-                            <div class="btn-group" role="group" aria-label="Basic example">
+                            <div class="btn-group" role="group">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#new_task_modal">New Task</button>
                                 <button type="button" class="btn btn-secondary">Middle</button>
@@ -61,7 +61,7 @@
 
                                     </div>
                                     <h4>{{task.name}}</h4>
-                                    <p>Category: {{task.category}}</p>
+                                    <p class="font-italic">{{task.category}}</p>
 
                                 </div>
                                 <div class="card-body">
@@ -76,6 +76,7 @@
                     <div class="container tab" v-if="active_tab == 'task_details'">
                         <br>
                         <h3 v-if="task_selected == false">No task selected.</h3>
+
 
                         <div class="card card-rounded border-secondary">
                             <div class="card-header">
@@ -106,22 +107,23 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Disposition</span>
                                     </div>
-                                    <select class="form-select" aria-label="Default select example" v-model="active_task.disposition" :disabled="edit_task ? false : true">
-                                    <option value="" selected>Unknown...</option>
-                                    <option value="IN-PROGRESS">In-Progress</option>
-                                    <option value="COMPLETE">Complete</option>
-                                    <option value="REWORK">Rework</option>
+                                    <select class="form-select" aria-label="Default select example"
+                                        v-model="active_task.disposition" :disabled="edit_task ? false : true">
+                                        <option value="" selected>Unknown...</option>
+                                        <option value="IN-PROGRESS">In-Progress</option>
+                                        <option value="COMPLETE">Complete</option>
+                                        <option value="REWORK">Rework</option>
 
-                                  </select>
+                                    </select>
                                 </div>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Use Local FS</span>
                                     </div>
-                                    <input class="form-check-input align-middle" type="checkbox" value="" v-model="active_task.use_local_fs"
-                                        :disabled="edit_task ? false : true">
+                                    <input class="form-check-input align-middle" type="checkbox" value=""
+                                        v-model="active_task.use_local_fs" :disabled="edit_task ? false : true">
                                 </div>
-                                
+
                             </div>
                             <div class="card-body overflow-scroll">
 
@@ -174,9 +176,18 @@
         </div>
 
 
-        <div class="modal" id="new_task_modal" ref="new_task_modal">
+        <div class="modal" v-if="new_modal_show" id="new_task_modal" ref="new_task_modal">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
+                    <div v-if="task_already_exists_error" class="alert alert-danger">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <strong>Task Already Exists!</strong> <p href="#" class="alert-link">A task with the same name
+                            and category already exists. Please try again.</p>
+                    </div>
+                    <div v-if="field_empty_error" class="alert alert-danger">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <strong>Some fields are empty!</strong> 
+                    </div>
                     <div class="modal-header">
                         <h5 class="modal-title">New Task</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
@@ -199,10 +210,14 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" @click="submit_new_task"
-                            v-on:keyup.enter="submit_new_task" data-bs-dismiss="modal">Submit</button>
+                            v-on:keyup.enter="submit_new_task">Submit</button>
                         <button type="button" class="btn btn-secondary" @click="reset_new_task">Clear</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                             @click="reset_new_task">Close</button>
+                        <button type="button" class="close invisible" data-bs-dismiss="modal" aria-label="Close"
+                            id="close_new_modal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -225,10 +240,13 @@
                     selected_task_id: null,
                     active_task: {},
                     ask_delete_task: false,
+                    task_already_exists_error: false,
+                    field_empty_error: false,
                     new_task: {
                         "name": "",
                         "category": ""
                     },
+                    new_modal_show: true,
                     base_url: "http://127.0.0.1:8000"
                 }
             },
@@ -238,10 +256,44 @@
                         .then(response => this.tasks = response.data)
                 },
 
+                task_combo_exists(new_task) {
+                    for (const task of this.tasks) {
+                        // console.log(task.name)
+                        console.log(new_task.name)
+                        if ((task.name == new_task.name) && (task.category == new_task.category)) {
+                            return true
+                        }
+                    }
+                    return false
+                },
+                close_new_task_modal() {
+                    document.getElementById('close_new_modal').click()
+                },
+                check_new_modal_empty(){
+                    if ((this.new_task.name == "")||(this.new_task.category == "")){
+                        return true
+                    }
+                    return false
+                },
+
                 async submit_new_task() {
+                    empty = this.check_new_modal_empty()
+                    if (empty){
+                        this.field_empty_error = true
+                        return
+                    }
+                    exists = this.task_combo_exists(this.new_task)
+                    console.log(exists)
+                    if (exists) {
+                        this.task_already_exists_error = true
+                        return
+                    }
                     const response = await axios.post(this.base_url + '/tasks/new', this.new_task)
                     console.log('submitted')
                     this.active_task = response.data
+                    this.task_already_exists_error = false
+                    this.field_empty_error = false
+                    this.close_new_task_modal()
                     console.log(response)
                     this.edit_task = true
                     this.active_tab = 'task_details'
@@ -250,7 +302,10 @@
                 },
 
                 reset_new_task() {
-                    this.new_task = {}
+                    this.new_task = {
+                        "name":"",
+                        "category":""
+                    }
                 },
 
                 open_tab(name) {
