@@ -88,13 +88,12 @@
                             <div class="card card-rounded card-hover-effect-small" @click="open_task(task.id)">
                                 <div class="card-header">
                                     <div class="float-end">
-                                        <input type="checkbox">
-
+                                        <small class="fst-italic text-uppercase"
+                                            style="color: grey;">{{task.status}}</small>
                                     </div>
                                     <h5 class="text-uppercase">{{task.name}}</h5>
                                     <small class="fst-italic text-uppercase"
                                         style="color: grey;">{{task.category}}</small>
-
                                 </div>
                                 <div class="card-body" v-if="task.description != ''">
                                     <strong v-if="task.description != ''">Description:</strong>
@@ -113,7 +112,8 @@
                                 @click="edit_task = true" v-if="edit_task == false">Edit</button>
                             <button class="btn btn-outline-success" @click="update_task"
                                 v-if="edit_task == true">Save</button>
-                            <button class="btn btn-outline-info" @click="open_file_manager(active_task.id)">Files</button>
+                            <button class="btn btn-outline-info"
+                                @click="open_file_manager(active_task.id)">Files</button>
                             <button @click="close_task" class="btn btn-outline-danger">Close</button>
                         </div>
                         <hr>
@@ -147,10 +147,10 @@
                                 </div>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text">Disposition</span>
+                                        <span class="input-group-text">Status</span>
                                     </div>
                                     <select class="form-select" aria-label="Default select example"
-                                        v-model="active_task.disposition" :disabled="edit_task ? false : true">
+                                        v-model="active_task.status" :disabled="edit_task ? false : true">
                                         <option value="" selected>Unknown...</option>
                                         <option value="IN-PROGRESS">In-Progress</option>
                                         <option value="COMPLETE">Complete</option>
@@ -312,14 +312,14 @@
                         .then(response => this.tasks = response.data)
                 },
 
-                open_file_manager(task_id){
-                    if (!this.active_task.use_local_fs){
+                open_file_manager(task_id) {
+                    if (!this.active_task.use_local_fs) {
                         return
                     }
-                    
-                    let params = {"id":task_id}
-                    axios.get(this.base_url + '/fs/task', {params})
-                    
+
+                    let params = { "id": task_id }
+                    axios.get(this.base_url + '/fs/task', { params })
+
                 },
 
                 clear_search_box() {
@@ -336,7 +336,7 @@
                         console.log(task)
                         console.log(task.name)
                         console.log(String(task.name).includes(this.search_str))
-                        if ((task.name.includes(this.search_str))||(task.category.includes(this.search_str))||(task.description.includes(this.search_str))||(String(task.notes).includes(this.search_str))||(String(task.charge_num).includes(this.search_str))&&(String(task.tve).includes(this.search_str))) {
+                        if ((task.name.includes(this.search_str)) || (task.category.includes(this.search_str)) || (task.description.includes(this.search_str)) || (String(task.notes).includes(this.search_str)) || (String(task.charge_num).includes(this.search_str)) && (String(task.tve).includes(this.search_str))) {
                             this.filtered_tasks.push(task)
                         }
                         else {
@@ -428,8 +428,8 @@
                     this.edit_task = false
                 },
 
-                try_save_task(){
-                    if (this.active_task != {} && this.active_tab == 'task_details' && this.edit_task){
+                try_save_task() {
+                    if (this.active_task != {} && this.active_tab == 'task_details' && this.edit_task) {
                         this.update_task()
                     }
                 }
@@ -438,15 +438,15 @@
             mounted() {
                 this.get_all()
 
-                window.addEventListener('keydown', (e)=>{
-                    if (e.keyCode == 83 && e.ctrlKey){
+                window.addEventListener('keydown', (e) => {
+                    if (e.keyCode == 83 && e.ctrlKey) {
                         e.preventDefault();
                         this.try_save_task()
                     }
                     // else if()
-                   
-                   
-                    
+
+
+
                 })
             }
         }).mount('#app')
