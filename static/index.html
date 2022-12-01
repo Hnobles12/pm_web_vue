@@ -18,7 +18,32 @@
 
         <div class="container-fluid align-middle">
             <div class="row">
-                <div class="col-2">Column</div>
+                <div class="col-2" style="height: 900px;">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Search</span>
+                        </div>
+                        <input type="text" class="form-control" v-model="search_str" @input="search_tasks">
+                        <div class="input-group-append rounded-0">
+                            <span class="input-group-text rounded-right">
+                                <button class="btn btn-close" @click="clear_search_box"></button>
+                            </span>
+                        </div>
+                    </div>
+                    <span><br></span>
+
+                    <div v-for="task in filtered_tasks" class="card card-rounded card-hover-effect" @click="open_task(task.id)">
+                        <div class="card-header">
+                            <p>{{task.name}}</p>
+                            <small>{{task.category}}</small>
+                        </div>
+                        <div class="card-body">
+                            <p>{{task.description}}</p>
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="col-10">
                     <div class="container overflow-hidden h-80">
                         <div class="row">
@@ -77,18 +102,18 @@
                         <br>
                         <h3 v-if="task_selected == false">No task selected.</h3>
                         <span class="align-start">
-<div class="btn-group align-start" role="group"><button class="btn btn-outline-light"
-                                        @click="edit_task = true" v-if="edit_task == false">Edit</button>
-                                    <button class="btn btn-outline-success" @click="update_task"
-                                        v-if="edit_task == true">Save</button>
-                                    <button @click="close_task" class="btn btn-outline-danger">Close</button>
-                                </div>
+                            <div class="btn-group align-start" role="group"><button class="btn btn-outline-light"
+                                    @click="edit_task = true" v-if="edit_task == false">Edit</button>
+                                <button class="btn btn-outline-success" @click="update_task"
+                                    v-if="edit_task == true">Save</button>
+                                <button @click="close_task" class="btn btn-outline-danger">Close</button>
+                            </div>
 
                         </span>
 
                         <div class="card card-rounded border-secondary overflow-scroll" style="height: 800px">
                             <div class="card-header">
-                                
+
                                 <br>
 
                                 <div class="input-group">
@@ -132,6 +157,9 @@
                                     <input class="form-check-input align-middle" type="checkbox" value=""
                                         v-model="active_task.use_local_fs" :disabled="edit_task ? false : true">
                                 </div>
+                                <small class="fst-italic">NOTE: Changing task name or category while using local file
+                                    system will require files to be moved from old task directory to the new one based
+                                    on the updated name and category.</small>
 
                             </div>
                             <div class="card-body overflow-scroll" style="height: 100%">
@@ -230,6 +258,8 @@
 
         <h5>active task below</h5>
         <p>{{ active_task }}</p>
+        <p>search_str: {{search_str}}</p>
+        <p>filtered_tasks: {{filtered_tasks}}</p>
     </div>
     <script>
         const { createApp } = Vue
@@ -244,6 +274,8 @@
                     edit_task: false,
                     selected_task_id: null,
                     active_task: {},
+                    search_str: "",
+                    filtered_tasks: [],
                     ask_delete_task: false,
                     task_already_exists_error: false,
                     field_empty_error: false,
@@ -260,6 +292,40 @@
                 get_all() {
                     axios.get(this.base_url + '/tasks')
                         .then(response => this.tasks = response.data)
+                },
+                clear_search_box(){
+                    this.filtered_tasks = []
+                    this.search_str = ""
+                },
+
+                search_tasks(){
+                    this.filtered_tasks = []
+                    if (this.search_str == ''){
+                        return
+                    }
+                    for (const task of this.tasks){
+                        console.log(task)
+                        console.log(task.name)
+                        console.log(String(task.name).includes(this.search_str))
+                        if (task.name.includes(this.search_str)){
+                            this.filtered_tasks.push(task)
+                        }
+                        else if (task.category.includes(this.search_str)){
+                            this.filtered_tasks.push(task)
+                        }
+                        else if (task.description.includes(this.search_str)){
+                            this.filtered_tasks.push(task)
+                        }
+                        else if (task.notes.includes(this.search_str)){
+                            this.filtered_tasks.push(task)
+                        }
+                        else if (String(task.charge_num).includes(this.search_str)){
+                            this.filtered_tasks.push(task)
+                        }
+                        else if (task.tve.includes(this.search_str)){
+                            this.filtered_tasks.push(task)
+                        }
+                    }
                 },
 
                 task_combo_exists(new_task) {
@@ -372,6 +438,17 @@
     .input-group .input-group-text {
         width: 100%;
     }
+
+    .card-hover-effect   .card {
+    transition: transform 0.2s ease;
+    box-shadow: 0 4px 6px 0 rgba(22, 22, 26, 0.18);
+    border-radius: 0;
+    border: 0;
+    margin-bottom: 1.5em;
+  }
+  .card-hover-effect:hover {
+    transform: scale(1.1);
+  }
 </style>
 
 </html>
