@@ -40,7 +40,7 @@ class FSManager:
         if not task.use_local_fs:
             return
         fm_exe = fm_exe or self.fm_exe
-        Popen([fm_exe]+args+[task.directory])
+        Popen([fm_exe]+args+[os.path.join(self.base, task.directory)])
 
         
         
