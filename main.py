@@ -10,7 +10,7 @@ CONF_PATH = 'db/config.json'
 
 conf = load_config(CONF_PATH)
 db = DB(conf.get('pm_db'))
-fs = FSManager(conf.get('pm_dir'))
+fs = FSManager(conf.get('pm_dir'), {'file_manager':conf.get('file_manager')})
 
 app = FastAPI()
 app.mount('/ui', StaticFiles(directory='static'), name='static') 
@@ -23,6 +23,11 @@ async def root():
 async def tasks():
     tasks = db.all_tasks()
     return tasks
+
+@app.get('/fs/task<id:int>')
+async def open_task_in_fm(id:int):
+    task = db.get_task_by_id(id)
+    fs.open_fm(task, args=['-c'])
 
 @app.post('/tasks/new')
 async def new_task(task: Task):

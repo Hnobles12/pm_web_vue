@@ -15,6 +15,7 @@ class DirectoryExistsWarning(Warning):
 class FSManager:
     def __init__(self, PM_BASE_DIR:str, apps: dict={}):
         self.base = PM_BASE_DIR
+        self.fm_exe = apps.get('file_manager')
         
         
     def create_proj_dir(self, task: Task)->str:
@@ -32,9 +33,12 @@ class FSManager:
         task.directory = path.as_posix()
         return path.as_posix()
         
-    def open_fm(self, task:Task, fm_exe:str, args:list[str]=[]):
+    def open_fm(self, task:Task, fm_exe:str=None, args:list[str]=[]):
+        if not task.use_local_fs:
+            return
+        fm_exe = fm_exe or self.fm_exe
         Popen([fm_exe]+args+[task.directory])
-        pass
+
         
         
 
