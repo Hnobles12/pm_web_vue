@@ -18,7 +18,7 @@ class FSManager:
         self.fm_exe = apps.get('file_manager')
         
         
-    def create_proj_dir(self, task: Task)->str:
+    def create_proj_dir(self, task: Task, subdirs=['Documentation', 'Analysis', 'Models'])->str:
         category = task.category
         name = task.name
         if category == '':
@@ -27,9 +27,12 @@ class FSManager:
         #create path in form base+{category}+{name}
         
         path = Path(os.path.join(self.base, category, name))
-        print(path)
-        
         path.mkdir(parents=True, exist_ok=True)
+        
+        for dir in subdirs:
+            p = path / dir
+            p.mkdir(parents=True, exist_ok=True)
+        
         task.directory = path.as_posix()
         return path.as_posix()
         
