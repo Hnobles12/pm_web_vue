@@ -18,7 +18,7 @@
 
         <div class="container-fluid align-middle">
             <div class="row">
-                <div class="col-2" style="height: 900px;">
+                <div class="col-2 align-middle" style="height: 900px;">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Search</span>
@@ -79,7 +79,7 @@
                         </div>
                         <br>
                         <div class="row" v-for="task in tasks">
-                            <div class="card card-rounded">
+                            <div class="card card-rounded card-hover-effect-small" @click="open_task(task.id)">
                                 <div class="card-header">
                                     <div class="float-end">
                                         <input type="checkbox">
@@ -447,7 +447,17 @@
     margin-bottom: 1.5em;
   }
   .card-hover-effect:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
+  }
+  .card-hover-effect-small   .card {
+    transition: transform 0.2s ease;
+    box-shadow: 0 4px 6px 0 rgba(22, 22, 26, 0.18);
+    border-radius: 0;
+    border: 0;
+    margin-bottom: 1.5em;
+  }
+  .card-hover-effect-small:hover {
+    transform: scale(1.0075);
   }
 </style>
 
