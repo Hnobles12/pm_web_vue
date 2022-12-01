@@ -455,10 +455,11 @@
 
                 window.addEventListener('keydown', (e)=>{
                     if (e.keyCode == 83 && e.ctrlKey){
+                        e.preventDefault();
                         this.try_save_task()
                     }
                     // else if()
-                   e.preventDefault();
+                   
                    
                     
                 })
