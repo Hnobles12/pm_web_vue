@@ -24,7 +24,7 @@ async def tasks():
     tasks = db.all_tasks()
     return tasks
 
-@app.get('/fs/task<id:int>')
+@app.get('/fs/task')
 async def open_task_in_fm(id:int):
     task = db.get_task_by_id(id)
     fs.open_fm(task, args=['-c'])

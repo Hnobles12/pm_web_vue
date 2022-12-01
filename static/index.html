@@ -113,6 +113,7 @@
                                 @click="edit_task = true" v-if="edit_task == false">Edit</button>
                             <button class="btn btn-outline-success" @click="update_task"
                                 v-if="edit_task == true">Save</button>
+                            <button class="btn btn-outline-info" @click="open_file_manager(active_task.id)">Files</button>
                             <button @click="close_task" class="btn btn-outline-danger">Close</button>
                         </div>
                         <hr>
@@ -310,6 +311,17 @@
                     axios.get(this.base_url + '/tasks')
                         .then(response => this.tasks = response.data)
                 },
+
+                open_file_manager(task_id){
+                    if (!this.active_task.use_local_fs){
+                        return
+                    }
+                    
+                    let params = {"id":task_id}
+                    axios.get(this.base_url + '/fs/task', {params})
+                    
+                },
+
                 clear_search_box() {
                     this.filtered_tasks = []
                     this.search_str = ""
@@ -442,11 +454,12 @@
                 this.get_all()
 
                 window.addEventListener('keydown', (e)=>{
-                    if (!(e.keyCode == 83 && e.ctrlKey)){
-                        return
+                    if (e.keyCode == 83 && e.ctrlKey){
+                        this.try_save_task()
                     }
+                    // else if()
                    e.preventDefault();
-                   this.try_save_task()
+                   
                     
                 })
             }
