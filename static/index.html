@@ -429,11 +429,26 @@
                     this.active_task = response.data
                     console.log(response)
                     this.edit_task = false
+                },
+
+                try_save_task(){
+                    if (this.active_task != {} && this.active_tab == 'task_details' && this.edit_task){
+                        this.update_task()
+                    }
                 }
             },
 
             mounted() {
                 this.get_all()
+
+                window.addEventListener('keydown', (e)=>{
+                    if (!(e.keyCode == 83 && e.ctrlKey)){
+                        return
+                    }
+                   e.preventDefault();
+                   this.try_save_task()
+                    
+                })
             }
         }).mount('#app')
     </script>
