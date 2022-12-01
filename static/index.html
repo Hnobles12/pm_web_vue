@@ -14,8 +14,12 @@
 
 <body>
     <div id="app">
-        <h1>Tasks</h1>
-
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Project Manager - Web v1</a>
+            </div>
+        </nav>
+        <br>
         <div class="container-fluid align-middle">
             <div class="row">
                 <div class="col-2 align-middle" style="height: 900px;">
@@ -35,7 +39,8 @@
                     <div v-for="task in filtered_tasks" class="card card-rounded card-hover-effect"
                         @click="open_task(task.id)">
                         <div class="card-header">
-                            <p class="text-uppercase">{{task.name}}<br><small class="text-uppercase" style="color: grey;">{{task.category}}</small></p>
+                            <p class="text-uppercase">{{task.name}}<br><small class="text-uppercase"
+                                    style="color: grey;">{{task.category}}</small></p>
                         </div>
                         <div class="card-body" v-if="task.description != ''">
                             <p>{{task.description}}</p>
@@ -69,6 +74,7 @@
                         </div>
                     </div>
                     <div class="container tab" v-if="active_tab == 'tasks'">
+                        <br>
                         <div class="row">
                             <div class="btn-group" role="group">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -86,7 +92,8 @@
 
                                     </div>
                                     <h5 class="text-uppercase">{{task.name}}</h5>
-                                    <small class="fst-italic text-uppercase" style="color: grey;">{{task.category}}</small>
+                                    <small class="fst-italic text-uppercase"
+                                        style="color: grey;">{{task.category}}</small>
 
                                 </div>
                                 <div class="card-body" v-if="task.description != ''">
@@ -102,15 +109,14 @@
                     <div class="container tab" v-if="active_tab == 'task_details'">
                         <br>
                         <h3 v-if="task_selected == false">No task selected.</h3>
-                        <span class="align-start">
-                            <div class="btn-group align-start" role="group"><button class="btn btn-outline-light"
-                                    @click="edit_task = true" v-if="edit_task == false">Edit</button>
-                                <button class="btn btn-outline-success" @click="update_task"
-                                    v-if="edit_task == true">Save</button>
-                                <button @click="close_task" class="btn btn-outline-danger">Close</button>
-                            </div>
-
-                        </span>
+                        <div class="btn-group align-start" role="group"><button class="btn btn-outline-light"
+                                @click="edit_task = true" v-if="edit_task == false">Edit</button>
+                            <button class="btn btn-outline-success" @click="update_task"
+                                v-if="edit_task == true">Save</button>
+                            <button @click="close_task" class="btn btn-outline-danger">Close</button>
+                        </div>
+                        <hr>
+                        
 
                         <div class="card card-rounded border-secondary overflow-scroll" style="height: 800px">
                             <div class="card-header">
