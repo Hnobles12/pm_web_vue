@@ -60,8 +60,8 @@
                                         <input type="checkbox">
 
                                     </div>
-                                    <h4>{{task.name}}</h4>
-                                    <p class="font-italic">{{task.category}}</p>
+                                    <h4 class="text-uppercase">{{task.name}}</h4>
+                                    <p class="fst-italic text-uppercase">{{task.category}}</p>
 
                                 </div>
                                 <div class="card-body">
@@ -76,11 +76,20 @@
                     <div class="container tab" v-if="active_tab == 'task_details'">
                         <br>
                         <h3 v-if="task_selected == false">No task selected.</h3>
+                        <span class="align-start">
+<div class="btn-group align-start" role="group"><button class="btn btn-outline-light"
+                                        @click="edit_task = true" v-if="edit_task == false">Edit</button>
+                                    <button class="btn btn-outline-success" @click="update_task"
+                                        v-if="edit_task == true">Save</button>
+                                    <button @click="close_task" class="btn btn-outline-danger">Close</button>
+                                </div>
 
+                        </span>
 
-                        <div class="card card-rounded border-secondary">
+                        <div class="card card-rounded border-secondary overflow-scroll" style="height: 800px">
                             <div class="card-header">
-
+                                
+                                <br>
 
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -125,10 +134,10 @@
                                 </div>
 
                             </div>
-                            <div class="card-body overflow-scroll">
+                            <div class="card-body overflow-scroll" style="height: 100%">
 
                                 <div class="card border-secondary">
-                                    <div class="card-header">Description</div>
+                                    <div id="description" class="card-header">Description</div>
                                     <div class="card-body">
                                         <textarea class="form-control" v-model="active_task.description" rows="3"
                                             :readonly="edit_task ? false : true"></textarea>
@@ -158,12 +167,7 @@
 
 
 
-                                <div class="btn-group" role="group"><button class="btn btn-outline-light"
-                                        @click="edit_task = true" v-if="edit_task == false">Edit</button>
-                                    <button class="btn btn-outline-success" @click="update_task"
-                                        v-if="edit_task == true">Save</button>
-                                    <button @click="close_task" class="btn btn-outline-danger">Close</button>
-                                </div>
+
 
                             </div>
                         </div>
@@ -181,12 +185,13 @@
                 <div class="modal-content">
                     <div v-if="task_already_exists_error" class="alert alert-danger">
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        <strong>Task Already Exists!</strong> <p href="#" class="alert-link">A task with the same name
+                        <strong>Task Already Exists!</strong>
+                        <p href="#" class="alert-link">A task with the same name
                             and category already exists. Please try again.</p>
                     </div>
                     <div v-if="field_empty_error" class="alert alert-danger">
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        <strong>Some fields are empty!</strong> 
+                        <strong>Some fields are empty!</strong>
                     </div>
                     <div class="modal-header">
                         <h5 class="modal-title">New Task</h5>
@@ -244,7 +249,8 @@
                     field_empty_error: false,
                     new_task: {
                         "name": "",
-                        "category": ""
+                        "category": "",
+                        "use_local_fs": true
                     },
                     new_modal_show: true,
                     base_url: "http://127.0.0.1:8000"
@@ -269,8 +275,8 @@
                 close_new_task_modal() {
                     document.getElementById('close_new_modal').click()
                 },
-                check_new_modal_empty(){
-                    if ((this.new_task.name == "")||(this.new_task.category == "")){
+                check_new_modal_empty() {
+                    if ((this.new_task.name == "") || (this.new_task.category == "")) {
                         return true
                     }
                     return false
@@ -278,7 +284,7 @@
 
                 async submit_new_task() {
                     empty = this.check_new_modal_empty()
-                    if (empty){
+                    if (empty) {
                         this.field_empty_error = true
                         return
                     }
@@ -303,8 +309,9 @@
 
                 reset_new_task() {
                     this.new_task = {
-                        "name":"",
-                        "category":""
+                        "name": "",
+                        "category": "",
+                        "use_local_fs": true
                     }
                 },
 
