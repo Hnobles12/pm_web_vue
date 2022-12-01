@@ -32,10 +32,10 @@
                     </div>
                     <span><br></span>
 
-                    <div v-for="task in filtered_tasks" class="card card-rounded card-hover-effect" @click="open_task(task.id)">
+                    <div v-for="task in filtered_tasks" class="card card-rounded card-hover-effect"
+                        @click="open_task(task.id)">
                         <div class="card-header">
-                            <p>{{task.name}}</p>
-                            <small>{{task.category}}</small>
+                            <p class="text-uppercase">{{task.name}}<br><small class="text-uppercase" style="color: grey;">{{task.category}}</small></p>
                         </div>
                         <div class="card-body" v-if="task.description != ''">
                             <p>{{task.description}}</p>
@@ -86,7 +86,7 @@
 
                                     </div>
                                     <h5 class="text-uppercase">{{task.name}}</h5>
-                                    <small class="fst-italic text-uppercase">{{task.category}}</small>
+                                    <small class="fst-italic text-uppercase" style="color: grey;">{{task.category}}</small>
 
                                 </div>
                                 <div class="card-body" v-if="task.description != ''">
@@ -294,37 +294,40 @@
                     axios.get(this.base_url + '/tasks')
                         .then(response => this.tasks = response.data)
                 },
-                clear_search_box(){
+                clear_search_box() {
                     this.filtered_tasks = []
                     this.search_str = ""
                 },
 
-                search_tasks(){
+                search_tasks() {
                     this.filtered_tasks = []
-                    if (this.search_str == ''){
+                    if (this.search_str == '') {
                         return
                     }
-                    for (const task of this.tasks){
+                    for (const task of this.tasks) {
                         console.log(task)
                         console.log(task.name)
                         console.log(String(task.name).includes(this.search_str))
-                        if (task.name.includes(this.search_str)){
+                        if (task.name.includes(this.search_str)) {
                             this.filtered_tasks.push(task)
                         }
-                        else if (task.category.includes(this.search_str)){
+                        else if (task.category.includes(this.search_str)) {
                             this.filtered_tasks.push(task)
                         }
-                        else if (task.description.includes(this.search_str)){
+                        else if (task.description.includes(this.search_str)) {
                             this.filtered_tasks.push(task)
                         }
-                        else if (task.notes.includes(this.search_str)){
+                        else if (String(task.notes).includes(this.search_str)) {
                             this.filtered_tasks.push(task)
                         }
-                        else if (String(task.charge_num).includes(this.search_str)){
+                        else if (String(task.charge_num).includes(this.search_str)) {
                             this.filtered_tasks.push(task)
                         }
-                        else if (task.tve.includes(this.search_str)){
+                        else if (String(task.tve).includes(this.search_str)) {
                             this.filtered_tasks.push(task)
+                        }
+                        else {
+                            continue
                         }
                     }
                 },
@@ -440,26 +443,29 @@
         width: 100%;
     }
 
-    .card-hover-effect   .card {
-    transition: transform 0.2s ease;
-    box-shadow: 0 4px 6px 0 rgba(22, 22, 26, 0.18);
-    border-radius: 0;
-    border: 0;
-    margin-bottom: 1.5em;
-  }
-  .card-hover-effect:hover {
-    transform: scale(1.05);
-  }
-  .card-hover-effect-small   .card {
-    transition: transform 0.2s ease;
-    box-shadow: 0 4px 6px 0 rgba(22, 22, 26, 0.18);
-    border-radius: 0;
-    border: 0;
-    margin-bottom: 1.5em;
-  }
-  .card-hover-effect-small:hover {
-    transform: scale(1.0075);
-  }
+    .card-hover-effect .card {
+        transition: transform 0.2s ease;
+        box-shadow: 0 4px 6px 0 rgba(22, 22, 26, 0.18);
+        border-radius: 0;
+        border: 0;
+        margin-bottom: 1.5em;
+    }
+
+    .card-hover-effect:hover {
+        transform: scale(1.05);
+    }
+
+    .card-hover-effect-small .card {
+        transition: transform 0.2s ease;
+        box-shadow: 0 4px 6px 0 rgba(22, 22, 26, 0.18);
+        border-radius: 0;
+        border: 0;
+        margin-bottom: 1.5em;
+    }
+
+    .card-hover-effect-small:hover {
+        transform: scale(1.0075);
+    }
 </style>
 
 </html>
