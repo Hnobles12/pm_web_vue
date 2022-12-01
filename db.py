@@ -54,6 +54,10 @@ class DB:
             tasks.reverse()
         return tasks
     
+    def get_task_by_id(self, task_id:int):
+        task = self.tasks.get(doc_id=task_id)
+        return Task.from_doc(task)
+    
     def update_task(self, task:Task)->bool:
         try:
             self.tasks.update(task.as_dict(), doc_ids=[task.id])
