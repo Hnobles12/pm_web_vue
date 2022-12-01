@@ -37,7 +37,7 @@
                             <p>{{task.name}}</p>
                             <small>{{task.category}}</small>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" v-if="task.description != ''">
                             <p>{{task.description}}</p>
                         </div>
                     </div>
