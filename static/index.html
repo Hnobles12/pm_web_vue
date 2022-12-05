@@ -64,6 +64,13 @@
                                         Task Details
                                     </button>
                                 </li>
+                                <li class="nav-item">
+                                    <button class="nav-link"
+                                        :class="{active: active_tab == 'stats'}"
+                                        @click="active_tab = 'stats'">
+                                        Stats
+                                    </button>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -211,6 +218,22 @@
 
 
 
+                    </div>
+                    <div class="container tab" v-if="active_tab == 'stats'">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Total Tasks</td>
+                                    <td>{{tasks.length}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
