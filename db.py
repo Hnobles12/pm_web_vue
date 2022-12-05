@@ -1,6 +1,7 @@
 import tinydb
 import json
 from pydantic import BaseModel
+from datetime import datetime
 
 class Task(BaseModel):
     name: str | None = ''
@@ -42,6 +43,7 @@ class DB:
             id = self.tasks.insert(task.as_dict())
             # task.id = id
             new_task = Task.from_doc(self.tasks.get(doc_id=id))
+            new_task.created = datetime.now().isoformat(' ')
             print(new_task)
         except:
             return False, {}
@@ -60,6 +62,7 @@ class DB:
     
     def update_task(self, task:Task)->bool:
         try:
+            task.updated = datetime.now().isoformat(' ')
             self.tasks.update(task.as_dict(), doc_ids=[task.id])
         except KeyError:
             return False
