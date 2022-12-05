@@ -9,7 +9,8 @@ from fs_manager import FSManager
 CONF_PATH = 'db/config.json'
 
 conf = load_config(CONF_PATH)
-db = DB(conf.get('pm_db'))
+db = DB(conf.get('pm_db'), clean=True)
+
 fs = FSManager(conf.get('pm_dir'), {'file_manager':conf.get('file_manager')})
 
 app = FastAPI()

@@ -32,11 +32,14 @@ class Task(BaseModel):
 
     
 class DB:
-    def __init__(self, db_file:str='.'):
+    def __init__(self, db_file:str='.', clean=False):
         self.file = db_file
         self.db = tinydb.TinyDB(self.file)
         self.tasks = self.db.table("tasks")
         # self.tags = self.db.table('tags')
+        
+        if clean:
+            self.clean_duplicates()
         
     def insert_task(self, task: Task)->tuple[bool, dict]:
         try:
@@ -76,3 +79,24 @@ class DB:
         except:
             return False
         return True
+    
+    def clean_duplicates(self):
+        tasks = self.tasks.all()
+        tasks.reverse()
+        tasks = [Task.from_doc(doc) for doc in tasks]
+        names = []
+        cleaned_tasks = []
+        duplicates_ids = []
+        for task in tasks:
+            if task.name in names:
+                duplicates_ids.append(task.id)
+            else:
+                names.append(task.name)
+        
+        print(f'Duplicates: {len(duplicates_ids)}')
+        # print('IDS:', duplicates_ids)  
+        print('Removing duplicate entries from db.')     
+        self.remove_tasks(duplicates_ids)
+        print('Duplicate entries removed.')
+                
+        
