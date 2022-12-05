@@ -79,7 +79,9 @@
                             <div class="btn-group" role="group">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#new_task_modal">New Task</button>
-                                <button type="button" class="btn btn-secondary">Middle</button>
+                                <input class="btn-check" type="checkbox" value=""
+                                        v-model="show_description" id="show_desc_btn">
+                                        <label class="btn btn-outline-primary" for="show_desc_btn">Toggle Description</label>
                                 <button type="button" class="btn btn-secondary">Right</button>
                             </div>
                         </div>
@@ -95,7 +97,7 @@
                                     <small class="fst-italic text-uppercase"
                                         style="color: grey;">{{task.category}}</small>
                                 </div>
-                                <div class="card-body" v-if="task.description != ''">
+                                <div class="card-body" v-if="task.description != '' && show_description">
                                     <strong v-if="task.description != ''">Description:</strong>
                                     <p class="card-text-small fw-light fst-italic">{{ task.description }}</p>
                                     <!-- <button class="btn btn-primary" @click="open_task(task.id)">Open</button> -->
@@ -293,6 +295,7 @@
                     active_tab: 'tasks',
                     task_selected: false,
                     edit_task: false,
+                    show_description:true,
                     selected_task_id: null,
                     active_task: {},
                     search_str: "",
