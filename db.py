@@ -8,7 +8,7 @@ class Task(BaseModel):
     id: int | None
     description: str | None = ''
     notes: str | None = ''
-    charge_num: int | None = 0
+    charge_num: str | None = ''
     category: str | None = "NONE"
     tags: list | None = []
     tve: str | None = ''
