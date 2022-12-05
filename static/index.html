@@ -64,12 +64,6 @@
                                         Task Details
                                     </button>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Link</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link disabled">Disabled</a>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -82,7 +76,6 @@
                                 <input class="btn-check" type="checkbox" value=""
                                         v-model="show_description" id="show_desc_btn">
                                         <label class="btn btn-outline-primary" for="show_desc_btn">Toggle Description</label>
-                                <button type="button" class="btn btn-secondary">Right</button>
                             </div>
                         </div>
                         <br>
@@ -406,6 +399,7 @@
 
                 open_tab(name) {
                     if (name == 'tasks') {
+                        this.get_all()
                         this.show_tasks_container = true;
                     }
                 },
