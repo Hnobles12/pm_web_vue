@@ -62,6 +62,8 @@ class DB:
     
     def update_task(self, task:Task)->bool:
         try:
+            if task.created == '':
+                task.created = datetime.now().isoformat(' ')
             task.updated = datetime.now().isoformat(' ')
             self.tasks.update(task.as_dict(), doc_ids=[task.id])
         except KeyError:
