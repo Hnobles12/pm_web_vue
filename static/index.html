@@ -65,8 +65,7 @@
                                     </button>
                                 </li>
                                 <li class="nav-item">
-                                    <button class="nav-link"
-                                        :class="{active: active_tab == 'stats'}"
+                                    <button class="nav-link" :class="{active: active_tab == 'stats'}"
                                         @click="active_tab = 'stats'">
                                         Stats
                                     </button>
@@ -80,9 +79,9 @@
                             <div class="btn-group" role="group">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#new_task_modal">New Task</button>
-                                <input class="btn-check" type="checkbox" value=""
-                                        v-model="show_description" id="show_desc_btn">
-                                        <label class="btn btn-outline-primary" for="show_desc_btn">Toggle Description</label>
+                                <input class="btn-check" type="checkbox" value="" v-model="show_description"
+                                    id="show_desc_btn">
+                                <label class="btn btn-outline-primary" for="show_desc_btn">Toggle Description</label>
                                 <button class="btn btn-primary" @click="get_all">Refresh List</button>
                             </div>
                         </div>
@@ -93,8 +92,9 @@
                                     <div class="float-end">
                                         <small class="fst-italic text-uppercase"
                                             style="color: grey;">{{task.status}}</small>
-                                            <br>
-                                        <small class="fst-italic text-lowercase" v-for="tag in task.tags">{{tag}}</small>
+                                        <br>
+                                        <small class="fst-italic text-lowercase"
+                                            v-for="tag in task.tags">{{tag}}</small>
                                     </div>
                                     <h5 class="text-uppercase">{{task.name}}</h5>
                                     <small class="fst-italic text-uppercase"
@@ -315,7 +315,7 @@
                     active_tab: 'tasks',
                     task_selected: false,
                     edit_task: false,
-                    show_description:true,
+                    show_description: true,
                     selected_task_id: null,
                     active_task: {},
                     search_str: "",
@@ -358,17 +358,32 @@
                     if (this.search_str == '') {
                         return
                     }
-                    for (const task of this.tasks) {
-                        console.log(task)
-                        console.log(task.name)
-                        console.log(String(task.name).includes(this.search_str))
-                        if ((task.name.includes(this.search_str)) || (task.category.includes(this.search_str)) || (task.description.includes(this.search_str)) || (String(task.notes).includes(this.search_str)) || (String(task.charge_num).includes(this.search_str)) && (String(task.tve).includes(this.search_str))) {
-                            this.filtered_tasks.push(task)
-                        }
-                        else {
-                            continue
+                    else if (this.search_str.includes('@status:')) {
+                        status = this.search_str.split('@status:')
+                        console.log(status.replace(',',''))
+                        for (const task of this.tasks) {
+                            console.log(task.status.includes(status.replace(',','')))
+                            if (task.status.includes(status)) {
+                                console.log(task.status)
+                                this.filtered_tasks.push(task)
+                            }
                         }
                     }
+                    else {
+                        for (const task of this.tasks) {
+                            // console.log(task)
+                            // console.log(task.name)
+                            // console.log(String(task.name).includes(this.search_str))
+
+                            if ((task.name.includes(this.search_str)) || (task.category.includes(this.search_str)) || (task.description.includes(this.search_str)) || (String(task.notes).includes(this.search_str)) || (String(task.charge_num).includes(this.search_str)) && (String(task.tve).includes(this.search_str))) {
+                                this.filtered_tasks.push(task)
+                            }
+                            else {
+                                continue
+                            }
+                        }
+                    }
+
                 },
 
                 task_combo_exists(new_task) {
@@ -470,6 +485,12 @@
                     if (e.keyCode == 83 && e.ctrlKey) {
                         e.preventDefault();
                         this.try_save_task()
+                    }
+                    else if(e.keyCode == 69 && e.ctrlKey){
+                        e.preventDefault()
+                        if (this.task_selected && this.active_tab == "task_details"){
+                            this.edit_task = true;
+                        }
                     }
                     // else if()
 
