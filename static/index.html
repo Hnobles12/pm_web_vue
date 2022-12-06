@@ -121,6 +121,30 @@
                                 @click="open_file_manager(active_task.id)">Files</button>
                             <button @click="close_task" class="btn btn-outline-danger">Close</button>
                         </div>
+                        <div class="float-end">
+                            <button class="btn btn-outline-danger" data-bs-toggle="modal"
+                            data-bs-target="#delete_task_modal">Delete Task</button>
+
+                            <div class="modal" id="delete_task_modal">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title">Delete Task?</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true"></span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <p>Are you sure you want to delete this task? This action is irreversible.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-danger" @click="delete_task(active_task.id)" data-bs-dismiss="modal">Delete</button>
+                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                        </div>
                         <hr>
 
 
@@ -431,6 +455,12 @@
                     this.get_all()
                 },
 
+                async delete_task(id){
+                    const request = await axios.post(this.base_url + '/tasks/remove', [id])
+                    this.close_task()
+                    this.active_tab = 'tasks'
+                },
+
                 reset_new_task() {
                     this.new_task = {
                         "name": "",
@@ -452,6 +482,7 @@
                     this.task_selected = true
                     this.active_task = this.tasks.find(task => task.id === this.selected_task_id)
                     this.active_tab = 'task_details'
+                    backToTop();
                 },
 
                 close_task() {
