@@ -87,8 +87,8 @@
                         </div>
                         <br>
                         <div class="row" v-for="task in tasks">
-                            <div class="card card-rounded card-hover-effect-small" @click="open_task(task.id)">
-                                <div class="card-header">
+                            <div class="card card-rounded card-hover-effect-small" >
+                                <div class="card-header" @click="open_task(task.id)">
                                     <div class="float-end">
                                         <small class="fst-italic text-uppercase"
                                             style="color: grey;">{{task.status}}</small>
@@ -600,9 +600,8 @@
 
     .card-hover-effect-small .card {
         transition: transform 0.2s ease;
-        box-shadow: 0 4px 6px 0 rgba(22, 22, 26, 0.18);
+        box-shadow: 0 4px 6px 0 rgba(230, 230, 238, 0.18);
         border-radius: 0;
-        border: 0;
         margin-bottom: 1.5em;
     }
 
