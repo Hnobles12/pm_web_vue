@@ -181,6 +181,7 @@
                                     <select class="form-select" aria-label="Default select example"
                                         v-model="active_task.status" :disabled="edit_task ? false : true">
                                         <option value="" selected>Unknown...</option>
+                                        <option value="NEW">New</option>
                                         <option value="IN-PROGRESS">In-Progress</option>
                                         <option value="COMPLETE">Complete</option>
                                         <option value="REWORK">Rework</option>
@@ -350,7 +351,8 @@
                     new_task: {
                         "name": "",
                         "category": "",
-                        "use_local_fs": true
+                        "use_local_fs": true,
+                        "status":"NEW"
                     },
                     new_modal_show: true,
                     base_url: "http://127.0.0.1:8000"
@@ -465,7 +467,8 @@
                     this.new_task = {
                         "name": "",
                         "category": "",
-                        "use_local_fs": true
+                        "use_local_fs": true,
+                        "status":"NEW"
                     }
                 },
 
