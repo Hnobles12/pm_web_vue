@@ -90,11 +90,11 @@
                         <div class="accordion bg-primary" id="accordionExample">
                             <div class="accordion-item">
                               <h2 class="accordion-header" id="headingOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                   New
                                 </button>
                               </h2>
-                              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     <div class="row" v-for="task in get_status_tasks('NEW')" >
                                         <div class="card card-rounded card-hover-effect-small align-start">
@@ -225,28 +225,7 @@
                           </div>
 
 
-                        <div class="row" v-for="task in tasks">
-                            <div class="card card-rounded card-hover-effect-small" >
-                                <div class="card-header" @click="open_task(task.id)">
-                                    <div class="float-end">
-                                        <small class="fst-italic text-uppercase"
-                                            style="color: grey;">{{task.status}}</small>
-                                        <br>
-                                        <small class="fst-italic text-lowercase"
-                                            v-for="tag in task.tags">{{tag}}</small>
-                                    </div>
-                                    <h5 class="text-uppercase">{{task.name}}</h5>
-                                    <small class="fst-italic text-uppercase"
-                                        style="color: grey;">{{task.category}}</small>
-                                </div>
-                                <div class="card-body" v-if="task.description != '' && show_description">
-                                    <strong v-if="task.description != ''">Description:</strong>
-                                    <p class="card-text-small fw-light fst-italic">{{ task.description }}</p>
-                                    <!-- <button class="btn btn-primary" @click="open_task(task.id)">Open</button> -->
-                                </div>
-                            </div>
-                            <br>
-                        </div>
+                       
                         <br>
                     </div>
                     <div class="container tab" v-if="active_tab == 'task_details'">
