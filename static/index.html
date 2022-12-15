@@ -34,8 +34,10 @@
                             </span>
                         </div>
                     </div>
+                    <small class="text-uppercase" style="color: grey;" v-if="filtered_tasks.length > 0">Found: {{filtered_tasks.length}} matches</small>
+                    <span v-if="filtered_tasks.length > 0"><hr></span>
                     <span><br></span>
-
+                    
                     <div v-for="task in filtered_tasks" class="card card-rounded card-hover-effect"
                         @click="open_task(task.id)">
                         <div class="card-header">
