@@ -263,10 +263,49 @@
                                     <div class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseFour" aria-expanded="false"
                                         aria-controls="collapseFour">
-                                        Complete: {{stats.complete}}
+                                        Hold: {{stats.hold}}
                                     </div>
                                 </h2>
                                 <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+                                    data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <div class="row" v-for="task in get_status_tasks('HOLD')">
+                                            <div class="card card-rounded card-hover-effect-small">
+                                                <div class="card-header" @click="open_task(task.id)">
+                                                    <div class="float-end">
+                                                        <small class="fst-italic text-uppercase"
+                                                            style="color: grey;">{{task.status}}</small>
+                                                        <br>
+                                                        <small class="fst-italic text-lowercase"
+                                                            v-for="tag in task.tags">{{tag}}</small>
+                                                    </div>
+                                                    <h5 class="text-uppercase">{{task.name}}</h5>
+                                                    <small class="fst-italic text-uppercase"
+                                                        style="color: grey;">{{task.category}}</small>
+                                                </div>
+                                                <div class="card-body"
+                                                    v-if="task.description != '' && show_description">
+                                                    <strong v-if="task.description != ''">Description:</strong>
+                                                    <p class="card-text-small fw-light fst-italic">{{ task.description
+                                                        }}</p>
+                                                    <!-- <button class="btn btn-primary" @click="open_task(task.id)">Open</button> -->
+                                                </div>
+                                            </div>
+                                            <br>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header sticky-top" id="headingFive">
+                                    <div class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseFive" aria-expanded="false"
+                                        aria-controls="collapseFive">
+                                        Complete: {{stats.complete}}
+                                    </div>
+                                </h2>
+                                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
                                     data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
                                         <div class="row" v-for="task in get_status_tasks('COMPLETE')">
@@ -383,6 +422,7 @@
                                         <option value="IN-PROGRESS">In-Progress</option>
                                         <option value="COMPLETE">Complete</option>
                                         <option value="REWORK">Rework</option>
+                                        <option value="HOLD">Hold</option>
 
                                     </select>
                                 </div>
@@ -700,6 +740,7 @@
                     in_progress = 0;
                     rework = 0;
                     complete = 0;
+                    hold = 0;
 
                     for (const task of this.tasks) {
 
@@ -716,6 +757,9 @@
                             case "COMPLETE":
                                 complete += 1;
                                 break;
+                            case "HOLD":
+                                hold += 1;
+                                break;
                         }
                     }
 
@@ -723,6 +767,7 @@
                     this.stats.in_progress = in_progress;
                     this.stats.rework = rework;
                     this.stats.complete = complete;
+                    this.stats.hold = hold;
 
                 },
 
