@@ -336,6 +336,45 @@
                                 </div>
 
                             </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header sticky-top" id="headingSix">
+                                    <div class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseSix" aria-expanded="false"
+                                        aria-controls="collapseSix">
+                                        All: {{stats.all}}
+                                    </div>
+                                </h2>
+                                <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix"
+                                    data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <div class="row" v-for="task in tasks">
+                                            <div class="card card-rounded card-hover-effect-small">
+                                                <div class="card-header" @click="open_task(task.id)">
+                                                    <div class="float-end">
+                                                        <small class="fst-italic text-uppercase"
+                                                            style="color: grey;">{{task.status}}</small>
+                                                        <br>
+                                                        <small class="fst-italic text-lowercase"
+                                                            v-for="tag in task.tags">{{tag}}</small>
+                                                    </div>
+                                                    <h5 class="text-uppercase">{{task.name}}</h5>
+                                                    <small class="fst-italic text-uppercase"
+                                                        style="color: grey;">{{task.category}}</small>
+                                                </div>
+                                                <div class="card-body"
+                                                    v-if="task.description != '' && show_description">
+                                                    <strong v-if="task.description != ''">Description:</strong>
+                                                    <p class="card-text-small fw-light fst-italic">{{ task.description
+                                                        }}</p>
+                                                    <!-- <button class="btn btn-primary" @click="open_task(task.id)">Open</button> -->
+                                                </div>
+                                            </div>
+                                            <br>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
 
 
@@ -735,8 +774,8 @@
                 },
 
                 update_stats() {
-                    this.stats.all = this.tasks.length,
-                        stat_new = 0;
+                    this.stats.all = this.tasks.length;
+                    stat_new = 0;
                     in_progress = 0;
                     rework = 0;
                     complete = 0;
